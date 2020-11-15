@@ -1,11 +1,18 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import ProductInventories from '../components/Home/ProductInventories'
 import { connect } from 'react-redux'
 import ScanBarcode from './ScanBarcode'
 import ListCart from '../components/ListCart'
+import { useSelector } from 'react-redux'
 
 function HomePage () {
+  const auth = useSelector(state=>state.authReducer)
+
+  console.log(auth)
+
+
+  if(!auth.loginStatus) return <Redirect to={'/login'} />
   return (
     <Container fluid>
       <Row>

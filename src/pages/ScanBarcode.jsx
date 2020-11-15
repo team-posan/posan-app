@@ -1,8 +1,13 @@
 import React, {useState} from 'react'
 import QrScanner from 'react-qr-reader'
 import QRcode from 'qrcode.react'
+import { useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+
 
 const ScanBarcode=()=>{
+    const auth = useSelector(state=>state.authReducer)
+
     const dataqr =   [
         {product_name:'indomie goreng', qty:10, status:'terbayar'},
         {product_name:'indomie rebus', qty:20, status:'terbayar'}]
@@ -25,6 +30,7 @@ const ScanBarcode=()=>{
     const errorHandler=(error)=>{
         console.log('error QR', error)
     }
+    if(!auth.loginStatus) return <Redirect to={'/login'} />
 
     return(
         <div>
@@ -49,7 +55,6 @@ const ScanBarcode=()=>{
                    size={400}
                    includeMargin={true}
                     />
-                    sue
                </div>
                :
                <p>asd</p>

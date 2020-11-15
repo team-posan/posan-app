@@ -1,21 +1,29 @@
 import { useState } from 'react'
 import { Form, Button, Card } from 'react-bootstrap'
-import { login } from '../services/auth.services'
+// import { login } from '../services/auth.services'
+import { loginAction } from '../store/actions/authAction'
+import { useDispatch, useSelector  } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 function Login () {
+
   const [inputKasir, setInputKasir] = useState({
     userName: '',
     password: ''
   })
 
+
+  const auth = useSelector(state=>state.authReducer)
+  const dispatch = useDispatch()
+
   const handleSubmitLogin = (e) => {
     e.preventDefault()
     console.log('masuk', inputKasir)
-    login({
-      username: inputKasir.userName,
-      password: inputKasir.password
-    }).then((res) => console.log('selesai', res))
+    dispatch(loginAction(inputKasir.userName,inputKasir.password))
   }
+
+
+  if(auth.loginStatus) return <Redirect to={'/'}/>
 
   return (
     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
