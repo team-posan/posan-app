@@ -1,20 +1,33 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import QrScanner from 'react-qr-reader'
 import QRcode from 'qrcode.react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { postCompleteStatus, fetchCart } from '../store/actions/dataAction'
+import ListCart from '../components/ListCart'
+import { Button } from 'react-bootstrap'
+import CardList from '../components/CardList'
 
 
 const ScanBarcode=()=>{
+    const [scanOn, setScanOn] = useState(false)
+    const cart = useSelector(state => state.dataReducer.cart)
     const auth = useSelector(state=>state.authReducer)
+    // Array from Customer
+    const dataqr =   [22, 23, 24]
 
-    const dataqr =   [
-        {product_name:'indomie goreng', qty:10, status:'terbayar'},
-        {product_name:'indomie rebus', qty:20, status:'terbayar'}]
+    useEffect(() => {
+        console.log('mmm', cart)
+    }, [cart])
 
-    const [qrScan, setQrScan ] = useState('no data')
+    const [qrScan, setQrScan ] = useState([])
     const [qrMake, setQrMake ] = useState(JSON.stringify(dataqr))
 
+    const dispatch = useDispatch()
+
+    // useState(() => {
+    //     console.log(qrScan)
+    // }, [qrScan] )
 
     const generateBarcode = (event) => {
         event.preventDefault()
@@ -23,27 +36,49 @@ const ScanBarcode=()=>{
 
     const scanHandler=(data)=>{
         if(data){
-            setQrScan(data)
+            setQrScan(JSON.parse(data))
+            console.log('masuk sini')
+            dispatch(fetchCart(JSON.parse(data)))
         }
     }
 
     const errorHandler=(error)=>{
         console.log('error QR', error)
     }
+
+    const scanButtonHandle = () => {
+        // setScanOn(!scanOn)
+        // dispatch(fetchCart(dataqr))
+
+    }
+
+    const selesaiButtonHandle = () => {
+        const idCart = cart.map(cartItem => cartItem.id)
+        console.log(idCart)
+        dispatch(postCompleteStatus(idCart))
+        setQrScan([])
+    }
+
     if(!auth.loginStatus) return <Redirect to={'/login'} />
 
     return(
         <div>
             <div>
                 <QrScanner
-                delay={500}
-                onError={errorHandler}
-                onScan={scanHandler}
-                style={{height:'400px', width:'400px'}}
+                    delay={500}
+                    onError={errorHandler}
+                    onScan={scanHandler}
+                    style={{height:'400px', width:'400px'}}
                 />
             </div>
+            <Button onClick={scanButtonHandle}>Scan</Button>
+            <Button onClick={selesaiButtonHandle}>Selesai</Button>
             <div>
-                {qrScan}
+                {
+                    cart ? cart.map(cartItem => {
+                        return <CardList key={cartItem.id} product={cartItem} />
+                    }) : <></>
+                }
             </div>
             <div>
                {
@@ -59,8 +94,6 @@ const ScanBarcode=()=>{
                :
                <p>asd</p>
                }
-               
-            
             </div>
         </div>
     )

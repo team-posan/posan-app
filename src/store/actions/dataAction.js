@@ -13,44 +13,64 @@ export const fetchProducts = () => {
       console.log('dari aciton', data)
       dispatch(setProduct(data))
     }).catch(err => {
+      console.error(err);
+    })
+  }
+}
+
+// disini ngehit server untuk set status selsai
+/**
+ * @params IdCartToComplete = [1, 2, 3, 4]
+ */
+export const postCompleteStatus = (IdCartToComplete) => {
+  return (dispatch) => {
+    axios.patch(baseUrlServer + '/carts', {
+      dataId: IdCartToComplete,
+      payment_status: 'completed'
+    }, {
+      headers: {
+        access_token: localStorage.access_token
+      }
+    })
+    .then(({data}) => {
+      console.log('dari aciton', data)
+      // dispatch(setCar(data))
+    }).catch(err => {
+      console.error('error', err); 
+    })
+  }
+}
+
+/**
+ * @params idCartToShow = [1, 2, 3, 4]
+ */
+export const fetchCart = (idCartToShow) => {
+  console.log('masuk', idCartToShow, localStorage.access_token)
+  console.log(idCartToShow)
+  return (dispatch) => {
+    axios.post(baseUrlServer + '/carts/scan', {
+      dataId: idCartToShow
+    }, {
+      headers: {
+        access_token: localStorage.access_token
+      }
+    })
+    .then(({data}) => {
+      console.log('dari aciton', data)
+      dispatch(setCart(data))
+    }).catch(err => {
       console.error(err); 
     })
   }
 }
 
-// disini ngehit server untuk set payment
-/**
- * @params IdCartToPay = [1, 2, 3, 4]
- */
-export const postPayment = (IdCartToPay) => {
-
-  return (dispatch) => {
-    fetch(baseUrlServer + '/carts', {
-      method: 'POST',
-      body: JSON.stringify(IdCartToPay),
-      headers: {
-        "Content-type": "application/json charset=UTF-8",
-        access_token: localStorage.access_token
-      }
-    })
-      .then (res => res.json())
-      .then (payload => {
-        console.log('dari action', payload)
-        dispatch(setProduct(payload))
-      })
-      .catch (err => {
-        console.log(err)
-      })
-  }
-}
-
-// disini ngatur payment secara local
-export const setPayment = (paymentInfo) => {
-  return {
-    type: 'SET_SETPAYMENT',
-    payload: paymentInfo
-  }
-}
+// // disini ngatur payment secara local
+// export const setCartStatus = (paymentInfo) => {
+//   return {
+//     type: 'SET_CART_STATUS',
+//     payload: paymentInfo
+//   }
+// }
 
 export const setProduct = (dataProduct) => {
   return {
@@ -63,9 +83,9 @@ export const setProduct = (dataProduct) => {
 
 // }
 
-export const getCart = (dataCart) => {
+export const setCart = (dataCart) => {
   return {
     type: 'SET_CART',
-    payload: dataCart
+    payload: dataCart.carts
   }
 }
