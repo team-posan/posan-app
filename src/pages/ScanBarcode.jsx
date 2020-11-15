@@ -23,7 +23,7 @@ const ScanBarcode=()=>{
     }
 
     const errorHandler=(error)=>{
-        console.log(error)
+        console.log('error QR', error)
     }
 
     return(
