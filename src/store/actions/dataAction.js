@@ -3,6 +3,7 @@ const baseUrlServer = 'http://localhost:5000'
 
 // 
 export const fetchProducts = () => {
+  console.log('dari aciton')
   return (dispatch) => {
     axios.get(baseUrlServer + '/product', {
       headers: {
@@ -34,7 +35,7 @@ export const postCompleteStatus = (IdCartToComplete) => {
     })
     .then(({data}) => {
       console.log('dari aciton', data)
-      // dispatch(setCar(data))
+      dispatch(setCart([]))
     }).catch(err => {
       console.error('error', err); 
     })
@@ -55,11 +56,13 @@ export const fetchCart = (idCartToShow) => {
         access_token: localStorage.access_token
       }
     })
-    .then(({data}) => {
-      console.log('dari aciton', data)
-      dispatch(setCart(data))
+    .then((response) => {
+      dispatch(setErrorBarcode(false))
+      console.log('dari aciton', response)
+      dispatch(setCart(response.data))
     }).catch(err => {
-      console.error(err); 
+      dispatch(setErrorBarcode(true))
+      console.error('masuk error action', err); 
     })
   }
 }
@@ -73,6 +76,7 @@ export const fetchCart = (idCartToShow) => {
 // }
 
 export const setProduct = (dataProduct) => {
+  console.log('product action', dataProduct)
   return {
     type: 'SET_PRODUCT',
     payload: dataProduct
@@ -87,5 +91,12 @@ export const setCart = (dataCart) => {
   return {
     type: 'SET_CART',
     payload: dataCart.carts
+  }
+}
+
+export const setErrorBarcode = (payload) => {
+  return {
+    type: 'SET_ERROR_BARCODE',
+    payload: payload
   }
 }
