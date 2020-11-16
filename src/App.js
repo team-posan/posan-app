@@ -28,13 +28,11 @@ function App() {
         <Router>
           <NavbarComponent />
           <Switch>
-            <Route exact path='/'>
-              {/* {localStorage.access_token ?   */}
+            {/* <Route exact path='/'>
               <HomePage /> 
-              {/* // : <Login /> } */}
-            </Route>
+            </Route> */}
+            <Route exact path='/' component={ScanBarcode}/>
             <Route exact path='/login' component={Login}/>
-            <Route exact path='/scanbarcode' component={ScanBarcode}/>
           </Switch>
         </Router>
       </div>

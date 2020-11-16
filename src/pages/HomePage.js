@@ -17,10 +17,7 @@ function HomePage () {
     <Container fluid>
       <Row>
         <Col sm={8} >
-          <Switch>
-            <Route exact path='/' component={ProductInventories} />
-            <Route exact path='/scanbarcode' component={ScanBarcode} />
-          </Switch>
+          
         </Col>
         <Col sm={4} >
           <ListCart />
