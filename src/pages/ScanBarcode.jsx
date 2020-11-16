@@ -14,7 +14,7 @@ const ScanBarcode=()=>{
     const cart = useSelector(state => state.dataReducer.cart)
     const auth = useSelector(state=>state.authReducer)
     // Array from Customer
-    const dataqr =   [22, 23, 24]
+    const dataqr =   [100]
 
     useEffect(() => {
         console.log('mmm', cart)
@@ -37,7 +37,7 @@ const ScanBarcode=()=>{
     const scanHandler=(data)=>{
         if(data){
             setQrScan(JSON.parse(data))
-            console.log('masuk sini')
+            // console.log('masuk sini scan handler', data)
             dispatch(fetchCart(JSON.parse(data)))
         }
     }
@@ -49,11 +49,11 @@ const ScanBarcode=()=>{
     const scanButtonHandle = () => {
         // setScanOn(!scanOn)
         // dispatch(fetchCart(dataqr))
-
     }
 
     const selesaiButtonHandle = () => {
-        const idCart = cart.map(cartItem => cartItem.id)
+        // cart = [id, id, id]
+        const idCart = cart
         console.log(idCart)
         dispatch(postCompleteStatus(idCart))
         setQrScan([])
@@ -71,7 +71,7 @@ const ScanBarcode=()=>{
                     style={{height:'400px', width:'400px'}}
                 />
             </div>
-            <Button onClick={scanButtonHandle}>Scan</Button>
+            {/* <Button onClick={scanButtonHandle}>Scan</Button> */}
             <Button onClick={selesaiButtonHandle}>Selesai</Button>
             <div>
                 {

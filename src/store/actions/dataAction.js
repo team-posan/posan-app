@@ -26,7 +26,7 @@ export const postCompleteStatus = (IdCartToComplete) => {
   return (dispatch) => {
     axios.patch(baseUrlServer + '/carts', {
       dataId: IdCartToComplete,
-      payment_status: 'completed'
+      payment_status: 'done'
     }, {
       headers: {
         access_token: localStorage.access_token
