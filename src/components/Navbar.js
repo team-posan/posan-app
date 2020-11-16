@@ -30,7 +30,7 @@ function NavbarComponent () {
               <Link to='/' style={{textDecoration:'none', color:'silver'}}>Home</Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to='/scanbarcode' style={{textDecoration:'none', color:'silver'}}>Scan Barcode</Link>
+              <Link to='/product' style={{textDecoration:'none', color:'silver'}}>List Product</Link>
             </Nav.Link>
             <Nav.Link>
               <Link to='/history' style={{textDecoration:'none', color:'silver'}} >History</Link>

@@ -28,10 +28,10 @@ function App() {
         <Router>
           <NavbarComponent />
           <Switch>
-            {/* <Route exact path='/'>
-              <HomePage /> 
-            </Route> */}
             <Route exact path='/' component={ScanBarcode}/>
+            <Route exact path='/product'>
+              <HomePage />
+            </Route>
             <Route exact path='/login' component={Login}/>
           </Switch>
         </Router>

@@ -1,37 +1,44 @@
-import { Container, Row, Col } from 'react-bootstrap'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import ProductInventories from '../components/Home/ProductInventories'
-import { connect } from 'react-redux'
-import ScanBarcode from './ScanBarcode'
-import ListCart from '../components/ListCart'
+import { Container, CardDeck } from 'react-bootstrap'
+import CardComponent from '../components/CardComponent'
+import { Redirect } from 'react-router-dom'
+import {  useDispatch } from 'react-redux'
+import { fetchProducts } from '../store/actions/dataAction'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 function HomePage () {
   const auth = useSelector(state=>state.authReducer)
-
+  const product = useSelector(state => state.dataReducer.product)
   console.log(auth)
+  const dispatch = useDispatch()
 
+  useEffect(() => {
+    console.log(product)
+  }, [product])
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [])
 
   if(!auth.loginStatus) return <Redirect to={'/login'} />
   return (
     <Container fluid>
-      <Row>
-        <Col sm={8} >
-          
-        </Col>
-        <Col sm={4} >
-          <ListCart />
-        </Col>
-      </Row>
+      <CardDeck>
+      {
+        product.map(productItem => {
+        return <CardComponent title={productItem.title} key={productItem} product={productItem} />
+        })
+      }
+    </CardDeck>
     </Container>
   )
 }
 
-const mapStateToProps = state => {
-  return {
-    product: state.dataReducer.product
-  }
-}
+// const mapStateToProps = state => {
+//   return {
+//     product: state.dataReducer.product
+//   }
+// }
 
-export default connect(mapStateToProps)(HomePage)
+export default HomePage
 // export default HomePage

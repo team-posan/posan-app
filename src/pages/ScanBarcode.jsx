@@ -4,8 +4,7 @@ import QRcode from 'qrcode.react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { postCompleteStatus, fetchCart } from '../store/actions/dataAction'
-import ListCart from '../components/ListCart'
-import { Button } from 'react-bootstrap'
+import { Button,Container, Row, Col } from 'react-bootstrap'
 import CardList from '../components/CardList'
 
 
@@ -13,6 +12,7 @@ const ScanBarcode=()=>{
     const [scanOn, setScanOn] = useState(false)
     const cart = useSelector(state => state.dataReducer.cart)
     const auth = useSelector(state=>state.authReducer)
+    const error = useSelector(state=>state.dataReducer.error)
     // Array from Customer
     const dataqr =   [100]
 
@@ -53,7 +53,7 @@ const ScanBarcode=()=>{
 
     const selesaiButtonHandle = () => {
         // cart = [id, id, id]
-        const idCart = cart
+        const idCart = cart.map(cartItem => cartItem.id)
         console.log(idCart)
         dispatch(postCompleteStatus(idCart))
         setQrScan([])
@@ -63,23 +63,32 @@ const ScanBarcode=()=>{
 
     return(
         <div>
-            <div>
-                <QrScanner
-                    delay={500}
-                    onError={errorHandler}
-                    onScan={scanHandler}
-                    style={{height:'400px', width:'400px'}}
-                />
-            </div>
-            {/* <Button onClick={scanButtonHandle}>Scan</Button> */}
-            <Button onClick={selesaiButtonHandle}>Selesai</Button>
-            <div>
-                {
-                    cart ? cart.map(cartItem => {
-                        return <CardList key={cartItem.id} product={cartItem} />
-                    }) : <></>
-                }
-            </div>
+            <Container>
+                <Row>
+                    <Col sm={8}>
+                    <div>
+                        <QrScanner
+                            delay={500}
+                            onError={errorHandler}
+                            onScan={scanHandler}
+                            style={{height:'300px', width:'300px'}}
+                        />
+                    </div>
+                    </Col>
+                    <Col sm={4}>
+                    <Button onClick={selesaiButtonHandle}>Selesai</Button>
+                        <div>
+                            {
+                                cart ? cart.map(cartItem => {
+                                    return <CardList key={cartItem.id} product={cartItem} />
+                                }) : <></>
+                            }{
+                                error ? <p>Barcode Invalid</p> : <></>
+                            }
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
             <div>
                {
                    qrMake ? 
