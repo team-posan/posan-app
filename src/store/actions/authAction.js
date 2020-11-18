@@ -1,6 +1,7 @@
 import Axios from 'axios'
-const baseUrlServer = 'http://localhost:5000'
+import Swal from 'sweetalert2'
 
+const baseUrlServer = 'http://localhost:5000'   
 
 
 export const loginAction =(username, password)=>{
@@ -11,9 +12,18 @@ export const loginAction =(username, password)=>{
         password,
         })
         .then(({data})=>{
-            dispatch({type:'LOGIN_SUCCESS'})
-            localStorage.setItem('access_token', data.access_token)
             // return <Redirect to={'/'}/>
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Login Success <br> Welcome to POSAN Cashier Dashboard',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              .then(()=>{
+                dispatch({type:'LOGIN_SUCCESS'})
+                localStorage.setItem('access_token', data.access_token)
+              })
         })
         .catch(err=>{
             console.log(err)
